@@ -35,7 +35,7 @@ app.get('/articles', (request, response) => {
 });
 
 app.post('/articles', (request, response) => {
-  let SQL = 'INSERT INTO authors(author,"authorUrl") VALUES ($1,$2)ON CONFLICT DO NOTHING;'
+  let SQL = 'INSERT INTO authors (author, "authorUrl") VALUES ($1,$2) ON CONFLICT DO NOTHING;'
   let values = [
     request.body.author,
     request.body.authorUrl
@@ -49,11 +49,11 @@ app.post('/articles', (request, response) => {
     }
   )
 
-  SQL = 'SELECT author_id FROM authors WHERE author = $1;';
-  values = [request.body.author];
   // console.log(request.body.author);
-
+  
   function queryTwo() {
+    SQL = 'SELECT author_id FROM authors WHERE author = $1;';
+    values = [request.body.author];
     client.query( SQL, values,
       function(err, result) {
         if (err) console.error(err);
@@ -66,8 +66,8 @@ app.post('/articles', (request, response) => {
   }
 
   function queryThree(author_id) {
-    SQL = 'INSERT INTO articles(title,category,"publishedOn",body,author_id) VALUES($1,$2,$3,$4,$5);';
-    values = [ 
+    SQL = 'INSERT INTO articles(title, category, "publishedOn", body, author_id) VALUES($1,$2,$3,$4,$5);';
+    values = [
       request.body.title,
       request.body.category,
       request.body.publishedOn,
@@ -84,7 +84,7 @@ app.post('/articles', (request, response) => {
 });
 
 app.put('/articles/:id', function(request, response) {
-  let SQL = 'UPDATE authors SET author = $1, "authorUrl" = $2 WHERE author_id=$3;';
+  let SQL = 'UPDATE authors SET author = $1, "authorUrl" = $2 WHERE author_id = $3;';
   let values = [
     request.body.author,
     request.body.authorUrl,
