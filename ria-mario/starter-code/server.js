@@ -84,21 +84,22 @@ app.post('/articles', (request, response) => {
 });
 
 app.put('/articles/:id', function(request, response) {
-  let SQL = 'UPDATE authors SET author = $1, "authorUrl" = $2 WHERE author_id=$3';
+  let SQL = 'UPDATE authors SET author = $1, "authorUrl" = $2 WHERE author_id=$3;';
   let values = [
     request.body.author,
     request.body.authorUrl,
-    request.params.id
+    request.body.author_id
   ];
   client.query( SQL, values )
     .then(() => {
-      let SQL = 'UPDATE articles SET title = $1, category = $2, "publishedOn" = $3, body = $4 WHERE author_id = $5';
+      let SQL = 'UPDATE articles SET author_id = $1, title = $2, category = $3, "publishedOn" = $4, body = $5 WHERE article_id = $6;';
       let values = [
+        request.body.author_id,
         request.body.title,
         request.body.category,
         request.body.publishedOn,
         request.body.body,
-        request.params.id
+        request.params.id,
       ];
       client.query( SQL, values )
     })
@@ -123,7 +124,7 @@ app.delete('/articles/:id', (request, response) => {
 });
 
 app.delete('/articles', (request, response) => {
-  let SQL = 'DELETE FROM articles';
+  let SQL = 'DELETE FROM articles;';
   client.query( SQL )
     .then(() => {
       response.send('Delete complete');
